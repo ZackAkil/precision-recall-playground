@@ -3,7 +3,8 @@
 <head>
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js" integrity="sha256-AAhU14J4Gv8bFupUUcHaPQfvrdNauRHMt+S4UVcaJb0=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"
+        integrity="sha256-AAhU14J4Gv8bFupUUcHaPQfvrdNauRHMt+S4UVcaJb0=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <style>
         .pic {
@@ -44,8 +45,8 @@
             display: inline-block;
         }
 
-        .score:hover{
-           background-color: yellow; 
+        .score:hover {
+            background-color: yellow;
         }
     </style>
 </head>
@@ -56,12 +57,12 @@
 
     <h3>Predictions</h3>
     <div id="predictor">
-        <div id="cats" class="prediction ui-widget-header">
-            <h4>Cats</h4>
+        <div id="positives" class="prediction ui-widget-header">
+            <h4>Food</h4>
             <p></p>
         </div>
-        <div id="not-cats" class="prediction ui-widget-header">
-            <h4>Not Cats</h4>
+        <div id="negatives" class="prediction ui-widget-header">
+            <h4>Not Food</h4>
             <p></p>
         </div>
     </div>
@@ -92,39 +93,49 @@
         <p>F1: {{this.f1}}</p>
 
         <h3>Equations</h3>
-        <p>Precision = <score v-bind:label="'TP'" v-bind:elements="tp_elements"></score> / <score v-bind:label="'FP'" v-bind:elements="fp_elements"></score> </p>
-        <p>Recall = <score v-bind:label="'TP'" v-bind:elements="tp_elements"></score> / (<score v-bind:label="'TP'" v-bind:elements="tp_elements"></score> + <score v-bind:label="'FN'" v-bind:elements="fn_elements"></score>) </p>
+        <p>Precision = <score v-bind:label="'TP'" v-bind:elements="tp_elements"></score> / <score v-bind:label="'FP'"
+                v-bind:elements="fp_elements"></score>
+        </p>
+        <p>Recall = <score v-bind:label="'TP'" v-bind:elements="tp_elements"></score> / (<score v-bind:label="'TP'"
+                v-bind:elements="tp_elements"></score> + <score v-bind:label="'FN'" v-bind:elements="fn_elements">
+            </score>) </p>
 
     </div>
     </div>
 
-    <div class="pic ui-widget-content cat">
-        <img src="cats/1.png">
+    <div class="pic ui-widget-content positive">
+        <img src="images/1.jpg">
     </div>
-    <div class="pic ui-widget-content cat">
-        <img src="cats/2.png">
+    <div class="pic ui-widget-content positive">
+        <img src="images/2.jpg">
     </div>
-    <div class="pic ui-widget-content cat">
-        <img src="cats/3.png">
+    <div class="pic ui-widget-content positive">
+        <img src="images/3.jpg">
     </div>
-    <div class="pic ui-widget-content not-cat">
-        <img src="cats/4.png">
+    <div class="pic ui-widget-content positive">
+        <img src="images/4.jpg">
     </div>
-    <div class="pic ui-widget-content not-cat">
-        <img src="cats/5.png">
+    <div class="pic ui-widget-content negative">
+        <img src="images/5.jpg">
     </div>
-    <div class="pic ui-widget-content not-cat">
-        <img src="cats/6.png">
+    <div class="pic ui-widget-content negative">
+        <img src="images/6.jpg">
     </div>
-    <div class="pic ui-widget-content not-cat">
-        <img src="cats/7.png">
+    <div class="pic ui-widget-content negative">
+        <img src="images/7.jpg">
     </div>
+    <div class="pic ui-widget-content negative">
+        <img src="images/8.jpg">
+    </div>
+
 
 
     <script>
 
-        var cats = new Array()
-        var not_cats = new Array()
+        const IMAGE_FADE_AMOUNT = 0.2
+
+        var positives = new Array()
+        var negatives = new Array()
 
         function remove_from_array(arr, item) {
             for (var i = 0; i < arr.length; i++) {
@@ -154,19 +165,19 @@
                 },
                 over: function (event, ui) {
 
-                    if (this.id == "cats") {
-                        push_unique(cats, ui.draggable[0])
+                    if (this.id == "positives") {
+                        push_unique(positives, ui.draggable[0])
                     } else {
-                        push_unique(not_cats, ui.draggable[0])
+                        push_unique(negatives, ui.draggable[0])
                     }
 
                 },
                 out: function (event, ui) {
 
-                    if (this.id == "cats") {
-                        remove_from_array(cats, ui.draggable[0])
+                    if (this.id == "positives") {
+                        remove_from_array(positives, ui.draggable[0])
                     } else {
-                        remove_from_array(not_cats, ui.draggable[0])
+                        remove_from_array(negatives, ui.draggable[0])
                     }
                 }
             });
@@ -206,7 +217,7 @@
                         </span>`,
             methods: {
                 mouseover: function () {
-                    $('.pic').not($(this.elements)).css("opacity", 0.5)
+                    $('.pic').not($(this.elements)).css("opacity", IMAGE_FADE_AMOUNT)
                 },
                 mouseleave: function () {
                     $('.pic').not($(this.elements)).css("opacity", 1)
@@ -231,7 +242,7 @@
                         </div>`,
             methods: {
                 mouseover: function () {
-                    $('.pic').not($(this.elements)).css("opacity", 0.5)
+                    $('.pic').not($(this.elements)).css("opacity", IMAGE_FADE_AMOUNT)
                 },
                 mouseleave: function () {
                     $('.pic').not($(this.elements)).css("opacity", 1)
@@ -252,12 +263,12 @@
         var app = new Vue({
             el: '#scores',
             data: {
-                predicted_cats: cats,
-                predicted_not_cats: not_cats
+                predicted_positives: positives,
+                predicted_negatives: negatives
             },
             computed: {
                 f1: function () {
-                    return 2*((this.precision * this.recall) / (this.precision + this.recall))
+                    return 2 * ((this.precision * this.recall) / (this.precision + this.recall))
                 },
                 accuracy: function () {
                     return (this.tp + this.tn) / (this.tp + this.tn + this.fp + this.fn)
@@ -270,35 +281,35 @@
                 },
                 tp: function () {
                     // true positives
-                    return count_has_class(this.predicted_cats, 'cat')
+                    return count_has_class(this.predicted_positives, 'positive')
                 },
                 fp: function () {
                     // false positives
-                    return count_has_class(this.predicted_cats, 'not-cat')
+                    return count_has_class(this.predicted_positives, 'negative')
                 },
                 tn: function () {
                     // true negatives
-                    return count_has_class(this.predicted_not_cats, 'not-cat')
+                    return count_has_class(this.predicted_negatives, 'negative')
                 },
                 fn: function () {
                     // false negatives
-                    return count_has_class(this.predicted_not_cats, 'cat')
+                    return count_has_class(this.predicted_negatives, 'positive')
                 },
                 tp_elements: function () {
                     // true positives
-                    return get_has_class(this.predicted_cats, 'cat')
+                    return get_has_class(this.predicted_positives, 'positive')
                 },
                 fp_elements: function () {
                     // false positives
-                    return get_has_class(this.predicted_cats, 'not-cat')
+                    return get_has_class(this.predicted_positives, 'negative')
                 },
                 tn_elements: function () {
                     // true negatives
-                    return get_has_class(this.predicted_not_cats, 'not-cat')
+                    return get_has_class(this.predicted_negatives, 'negative')
                 },
                 fn_elements: function () {
                     // false negatives
-                    return get_has_class(this.predicted_not_cats, 'cat')
+                    return get_has_class(this.predicted_negatives, 'positive')
                 }
             }
         })
