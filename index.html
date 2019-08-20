@@ -43,6 +43,10 @@
             border: black 5px solid;
             display: inline-block;
         }
+
+        .score:hover{
+           background-color: yellow; 
+        }
     </style>
 </head>
 
@@ -81,10 +85,15 @@
 
             </div>
         </div>
+        <h3>Scores</h3>
+        <p>Precision: {{this.precision}}</p>
+        <p>Recall: {{this.recall}}</p>
+        <p>Accuracy: {{this.accuracy}}</p>
+        <p>F1: {{this.f1}}</p>
 
-        <p>Precision {{this.precision}}</p>
-        <p>Recall {{this.recall}}</p>
-        <p>Accuracy {{this.accuracy}}</p>
+        <h3>Equations</h3>
+        <p>Precision = <score v-bind:label="'TP'" v-bind:elements="tp_elements"></score> / <score v-bind:label="'FP'" v-bind:elements="fp_elements"></score> </p>
+        <p>Recall = <score v-bind:label="'TP'" v-bind:elements="tp_elements"></score> / (<score v-bind:label="'TP'" v-bind:elements="tp_elements"></score> + <score v-bind:label="'FN'" v-bind:elements="fn_elements"></score>) </p>
 
     </div>
     </div>
@@ -184,6 +193,27 @@
             return elements
         }
 
+        Vue.component('score', {
+            props: {
+                label: { type: String, required: true },
+                elements: { type: Array, required: true }
+            },
+            template: `<span class="score"
+                            v-on:mouseover="mouseover"
+                            v-on:mouseleave="mouseleave">
+                            {{label}}
+                            
+                        </span>`,
+            methods: {
+                mouseover: function () {
+                    $('.pic').not($(this.elements)).css("opacity", 0.5)
+                },
+                mouseleave: function () {
+                    $('.pic').not($(this.elements)).css("opacity", 1)
+                }
+            }
+        });
+
 
         Vue.component('confusion-tile', {
             props: {
@@ -226,6 +256,9 @@
                 predicted_not_cats: not_cats
             },
             computed: {
+                f1: function () {
+                    return 2*((this.precision * this.recall) / (this.precision + this.recall))
+                },
                 accuracy: function () {
                     return (this.tp + this.tn) / (this.tp + this.tn + this.fp + this.fn)
                 },
