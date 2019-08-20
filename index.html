@@ -93,8 +93,8 @@
         <p>F1: {{this.f1}}</p>
 
         <h3>Equations</h3>
-        <p>Precision = <score v-bind:label="'TP'" v-bind:elements="tp_elements"></score> / <score v-bind:label="'FP'"
-                v-bind:elements="fp_elements"></score>
+        <p>Precision = <score v-bind:label="'TP'" v-bind:elements="tp_elements"></score> / (<score v-bind:label="'TP'" v-bind:elements="tp_elements"></score>+<score v-bind:label="'FP'"
+            v-bind:elements="fp_elements"></score>)
         </p>
         <p>Recall = <score v-bind:label="'TP'" v-bind:elements="tp_elements"></score> / (<score v-bind:label="'TP'"
                 v-bind:elements="tp_elements"></score> + <score v-bind:label="'FN'" v-bind:elements="fn_elements">
