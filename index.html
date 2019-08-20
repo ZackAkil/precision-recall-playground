@@ -66,26 +66,18 @@
 
         <div id="confusion-matrix">
             <div class="confusion-row">
-                <div id="tp" class="confusion-score"  v-bind:style="{backgroundColor: 'rgb(0,255,0,'+tp/5+')'}">
-                    <p>TP {{this.tp}}</p>
-                </div>
-                <div id="fp" class="confusion-score" v-bind:style="{backgroundColor: 'rgb(255,0,0,'+fp/5+')'}">
-                    <p>FP {{this.fp}}</p>
-                </div>
+
+                <confusion-tile v-bind:label="'TP'" v-bind:score="tp"></confusion-tile>
+                <confusion-tile v-bind:label="'FP'" v-bind:score="fp"></confusion-tile>
+
             </div>
             <div class="confusion-row">
-                <div id="fn" class="confusion-score" v-bind:style="{backgroundColor: 'rgb(255,0,0,'+fn/5+')'}">
-                    <p>FN {{this.fn}}</p>
-                </div>
-                <div id="tn" class="confusion-score" v-bind:style="{backgroundColor: 'rgb(0,255,0,'+tn/5+')'}">
-                    <p>TN {{this.tn}}</p>
-                </div>
+                    <confusion-tile v-bind:label="'TN'" v-bind:score="tn"></confusion-tile>
+                    <confusion-tile v-bind:label="'FN'" v-bind:score="fn"></confusion-tile>
 
             </div>
         </div>
 
-        <p>Predicted cats <span id="cat-count">0</span> </p>
-        <p>Predicted <strong>not</strong> cats <span id="not-cat-count">0</span> </p>
         <p>Precision {{this.precision}}</p>
         <p>recall {{this.recall}}</p>
         <p>Accuracy {{this.accuracy}}</p>
@@ -154,7 +146,7 @@
                     } else {
                         push_unique(not_cats, ui.draggable[0])
                     }
-                    update_scores()
+
                 },
                 out: function (event, ui) {
                     console.log("hello there again");
@@ -167,37 +159,11 @@
                         remove_from_array(not_cats, ui.draggable[0])
                     }
 
-                    update_scores()
 
                 }
             });
         });
 
-        function update_scores() {
-            console.log("cat count: " + cats.length)
-            console.log("not cat count: " + not_cats.length)
-            $("#cat-count").text(cats.length)
-            $("#not-cat-count").text(not_cats.length)
-
-            var correct = 0
-            var wrong = 0
-
-            Array.from(cats).forEach(function (element) {
-                if ($(element).hasClass('cat')) {
-                    correct++
-                } else {
-                    wrong++
-                }
-            });
-
-            Array.from(not_cats).forEach(function (element) {
-                if (!$(element).hasClass('cat')) {
-                    correct++
-                } else {
-                    wrong++
-                }
-            });
-        }
 
         function count_has_class(els, class_name) {
             var count = 0
@@ -209,6 +175,25 @@
             });
             return count
         }
+
+
+        Vue.component('confusion-tile', {
+            props: {
+                label: { type: String, required: true },
+                score: { type: Number, required: true }
+            },
+            template: `<div id=label class="confusion-score"  
+                v-bind:style="{backgroundColor: 'rgb(0,255,0,'+score/5+')'}"
+                v-on:mouseover="highlight">
+                    <p>{{label}} {{score}}</p>
+                </div>
+                `,
+            methods: {
+                highlight: function () {
+                    console.log('shine')
+                }
+            }
+        });
 
 
         var app = new Vue({
