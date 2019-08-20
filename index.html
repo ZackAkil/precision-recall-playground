@@ -3,12 +3,15 @@
 <head>
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js" integrity="sha256-AAhU14J4Gv8bFupUUcHaPQfvrdNauRHMt+S4UVcaJb0=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <style>
         .pic {
             cursor: move;
             display: inline-block;
+
+            -webkit-transition: opacity 0.2s;
+            transition: opacity 0.2s;
         }
 
         .pic>img {
@@ -45,7 +48,6 @@
 
 
 <body>
-    <!-- Draggable DIV -->
 
 
     <h3>Predictions</h3>
@@ -66,20 +68,22 @@
 
         <div id="confusion-matrix">
             <div class="confusion-row">
-
-                <confusion-tile v-bind:label="'TP'" v-bind:score="tp"></confusion-tile>
-                <confusion-tile v-bind:label="'FP'" v-bind:score="fp"></confusion-tile>
-
+                <confusion-tile v-bind:label="'TP'" v-bind:score="tp" v-bind:good="true" v-bind:elements="tp_elements">
+                </confusion-tile>
+                <confusion-tile v-bind:label="'FP'" v-bind:score="fp" v-bind:good="false" v-bind:elements="fp_elements">
+                </confusion-tile>
             </div>
             <div class="confusion-row">
-                    <confusion-tile v-bind:label="'TN'" v-bind:score="tn"></confusion-tile>
-                    <confusion-tile v-bind:label="'FN'" v-bind:score="fn"></confusion-tile>
+                <confusion-tile v-bind:label="'FN'" v-bind:score="fn" v-bind:good="false" v-bind:elements="fn_elements">
+                </confusion-tile>
+                <confusion-tile v-bind:label="'TN'" v-bind:score="tn" v-bind:good="true" v-bind:elements="tn_elements">
+                </confusion-tile>
 
             </div>
         </div>
 
         <p>Precision {{this.precision}}</p>
-        <p>recall {{this.recall}}</p>
+        <p>Recall {{this.recall}}</p>
         <p>Accuracy {{this.accuracy}}</p>
 
     </div>
@@ -149,17 +153,12 @@
 
                 },
                 out: function (event, ui) {
-                    console.log("hello there again");
 
                     if (this.id == "cats") {
-                        // cats.delete(ui.draggable[0])
                         remove_from_array(cats, ui.draggable[0])
                     } else {
-                        // not_cats.delete(ui.draggable[0])
                         remove_from_array(not_cats, ui.draggable[0])
                     }
-
-
                 }
             });
         });
@@ -167,8 +166,7 @@
 
         function count_has_class(els, class_name) {
             var count = 0
-            Array.from(els).forEach(function (element) {
-
+            els.forEach(function (element) {
                 if ($(element).hasClass(class_name)) {
                     count++
                 }
@@ -176,21 +174,46 @@
             return count
         }
 
+        function get_has_class(els, class_name) {
+            var elements = []
+            els.forEach(function (element) {
+                if ($(element).hasClass(class_name)) {
+                    elements.push(element)
+                }
+            });
+            return elements
+        }
+
 
         Vue.component('confusion-tile', {
             props: {
                 label: { type: String, required: true },
-                score: { type: Number, required: true }
+                score: { type: Number, required: true },
+                good: { type: Boolean, required: true },
+                elements: { type: Array, required: true }
             },
             template: `<div id=label class="confusion-score"  
-                v-bind:style="{backgroundColor: 'rgb(0,255,0,'+score/5+')'}"
-                v-on:mouseover="highlight">
-                    <p>{{label}} {{score}}</p>
-                </div>
-                `,
+                            v-bind:style="{backgroundColor: rgb}"
+                            v-on:mouseover="mouseover"
+                            v-on:mouseleave="mouseleave">
+                            
+                            <p>{{label}} {{score}}</p>
+                        </div>`,
             methods: {
-                highlight: function () {
-                    console.log('shine')
+                mouseover: function () {
+                    $('.pic').not($(this.elements)).css("opacity", 0.5)
+                },
+                mouseleave: function () {
+                    $('.pic').not($(this.elements)).css("opacity", 1)
+                }
+            },
+            computed: {
+                rgb: function () {
+                    if (this.good) {
+                        return `rgb(0,255,0, ${this.score / 5})`
+                    } else {
+                        return `rgb(255,0,0, ${this.score / 5})`
+                    }
                 }
             }
         });
@@ -199,13 +222,8 @@
         var app = new Vue({
             el: '#scores',
             data: {
-                cats: cats,
-                not_cats: not_cats
-            },
-            methods: {
-                remove_comment: function (comment) {
-                    console.log("removing " + comment.id)
-                }
+                predicted_cats: cats,
+                predicted_not_cats: not_cats
             },
             computed: {
                 accuracy: function () {
@@ -219,19 +237,35 @@
                 },
                 tp: function () {
                     // true positives
-                    return count_has_class(this.cats, 'cat')
+                    return count_has_class(this.predicted_cats, 'cat')
                 },
                 fp: function () {
                     // false positives
-                    return count_has_class(this.cats, 'not-cat')
+                    return count_has_class(this.predicted_cats, 'not-cat')
                 },
                 tn: function () {
                     // true negatives
-                    return count_has_class(this.not_cats, 'not-cat')
+                    return count_has_class(this.predicted_not_cats, 'not-cat')
                 },
                 fn: function () {
                     // false negatives
-                    return count_has_class(this.not_cats, 'cat')
+                    return count_has_class(this.predicted_not_cats, 'cat')
+                },
+                tp_elements: function () {
+                    // true positives
+                    return get_has_class(this.predicted_cats, 'cat')
+                },
+                fp_elements: function () {
+                    // false positives
+                    return get_has_class(this.predicted_cats, 'not-cat')
+                },
+                tn_elements: function () {
+                    // true negatives
+                    return get_has_class(this.predicted_not_cats, 'not-cat')
+                },
+                fn_elements: function () {
+                    // false negatives
+                    return get_has_class(this.predicted_not_cats, 'cat')
                 }
             }
         })
