@@ -1,0 +1,258 @@
+<html>
+
+<head>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <style>
+        .pic {
+            cursor: move;
+            display: inline-block;
+        }
+
+        .pic>img {
+            max-width: 150px;
+        }
+
+        #predictor {
+            display: inline-block;
+
+            border: red 5px solid;
+        }
+
+        .prediction {
+            height: 400px;
+            width: 400px;
+            border: blue 5px solid;
+            display: inline-block;
+            padding: 15px;
+        }
+
+        #confusion-matrix {
+            border: red 5px solid;
+            display: inline-block;
+        }
+
+        .confusion-score {
+            height: 100px;
+            width: 100px;
+            border: black 5px solid;
+            display: inline-block;
+        }
+    </style>
+</head>
+
+
+<body>
+    <!-- Draggable DIV -->
+
+
+    <h3>Predictions</h3>
+    <div id="predictor">
+        <div id="cats" class="prediction ui-widget-header">
+            <h4>Cats</h4>
+            <p></p>
+        </div>
+        <div id="not-cats" class="prediction ui-widget-header">
+            <h4>Not Cats</h4>
+            <p></p>
+        </div>
+    </div>
+
+    <div id="scores">
+
+        <h3>Confusion Matrix</h3>
+
+        <div id="confusion-matrix">
+            <div class="confusion-row">
+                <div id="tp" class="confusion-score"  v-bind:style="{backgroundColor: 'rgb(0,255,0,'+tp/5+')'}">
+                    <p>TP {{this.tp}}</p>
+                </div>
+                <div id="fp" class="confusion-score" v-bind:style="{backgroundColor: 'rgb(255,0,0,'+fp/5+')'}">
+                    <p>FP {{this.fp}}</p>
+                </div>
+            </div>
+            <div class="confusion-row">
+                <div id="fn" class="confusion-score" v-bind:style="{backgroundColor: 'rgb(255,0,0,'+fn/5+')'}">
+                    <p>FN {{this.fn}}</p>
+                </div>
+                <div id="tn" class="confusion-score" v-bind:style="{backgroundColor: 'rgb(0,255,0,'+tn/5+')'}">
+                    <p>TN {{this.tn}}</p>
+                </div>
+
+            </div>
+        </div>
+
+        <p>Predicted cats <span id="cat-count">0</span> </p>
+        <p>Predicted <strong>not</strong> cats <span id="not-cat-count">0</span> </p>
+        <p>Precision {{this.precision}}</p>
+        <p>recall {{this.recall}}</p>
+        <p>Accuracy {{this.accuracy}}</p>
+
+    </div>
+    </div>
+
+    <div class="pic ui-widget-content cat">
+        <img src="cats/1.png">
+    </div>
+    <div class="pic ui-widget-content cat">
+        <img src="cats/2.png">
+    </div>
+    <div class="pic ui-widget-content cat">
+        <img src="cats/3.png">
+    </div>
+    <div class="pic ui-widget-content not-cat">
+        <img src="cats/4.png">
+    </div>
+    <div class="pic ui-widget-content not-cat">
+        <img src="cats/5.png">
+    </div>
+    <div class="pic ui-widget-content not-cat">
+        <img src="cats/6.png">
+    </div>
+    <div class="pic ui-widget-content not-cat">
+        <img src="cats/7.png">
+    </div>
+
+
+    <script>
+
+        var cats = new Array()
+        var not_cats = new Array()
+
+        function remove_from_array(arr, item) {
+            for (var i = 0; i < arr.length; i++) {
+                if (arr[i] === item) {
+                    arr.splice(i, 1);
+                }
+            }
+        }
+
+        function push_unique(arr, item) {
+            for (var i = 0; i < arr.length; i++) {
+                if (arr[i] === item) {
+                    return
+                }
+            }
+            arr.push(item)
+        }
+
+
+
+        $(function () {
+            $(".pic").draggable({});
+
+            $(".prediction").droppable({
+                classes: {
+                    "ui-droppable-hover": "ui-state-hover"
+                },
+                over: function (event, ui) {
+
+                    if (this.id == "cats") {
+                        push_unique(cats, ui.draggable[0])
+                    } else {
+                        push_unique(not_cats, ui.draggable[0])
+                    }
+                    update_scores()
+                },
+                out: function (event, ui) {
+                    console.log("hello there again");
+
+                    if (this.id == "cats") {
+                        // cats.delete(ui.draggable[0])
+                        remove_from_array(cats, ui.draggable[0])
+                    } else {
+                        // not_cats.delete(ui.draggable[0])
+                        remove_from_array(not_cats, ui.draggable[0])
+                    }
+
+                    update_scores()
+
+                }
+            });
+        });
+
+        function update_scores() {
+            console.log("cat count: " + cats.length)
+            console.log("not cat count: " + not_cats.length)
+            $("#cat-count").text(cats.length)
+            $("#not-cat-count").text(not_cats.length)
+
+            var correct = 0
+            var wrong = 0
+
+            Array.from(cats).forEach(function (element) {
+                if ($(element).hasClass('cat')) {
+                    correct++
+                } else {
+                    wrong++
+                }
+            });
+
+            Array.from(not_cats).forEach(function (element) {
+                if (!$(element).hasClass('cat')) {
+                    correct++
+                } else {
+                    wrong++
+                }
+            });
+        }
+
+        function count_has_class(els, class_name) {
+            var count = 0
+            Array.from(els).forEach(function (element) {
+
+                if ($(element).hasClass(class_name)) {
+                    count++
+                }
+            });
+            return count
+        }
+
+
+        var app = new Vue({
+            el: '#scores',
+            data: {
+                cats: cats,
+                not_cats: not_cats
+            },
+            methods: {
+                remove_comment: function (comment) {
+                    console.log("removing " + comment.id)
+                }
+            },
+            computed: {
+                accuracy: function () {
+                    return (this.tp + this.tn) / (this.tp + this.tn + this.fp + this.fn)
+                },
+                precision: function () {
+                    return this.tp / (this.tp + this.fp)
+                },
+                recall: function () {
+                    return this.tp / (this.tp + this.fn)
+                },
+                tp: function () {
+                    // true positives
+                    return count_has_class(this.cats, 'cat')
+                },
+                fp: function () {
+                    // false positives
+                    return count_has_class(this.cats, 'not-cat')
+                },
+                tn: function () {
+                    // true negatives
+                    return count_has_class(this.not_cats, 'not-cat')
+                },
+                fn: function () {
+                    // false negatives
+                    return count_has_class(this.not_cats, 'cat')
+                }
+            }
+        })
+
+
+    </script>
+</body>
+
+</html>
