@@ -126,8 +126,8 @@
 
         .confusion-score-info-icon {
             position: absolute;
-            right: 0.5em;
-            top: 0.5em;
+            right: 5px;
+            top: 5px;
             color: darkgrey;
         }
 
@@ -256,19 +256,19 @@
                                     </div>
                                 </div>
                                 <div class="confusion-row">
-                                    <confusion-tile v-bind:label="'TP'" v-bind:score="tp" v-bind:good="true"
+                                    <confusion-tile v-bind:label="'True Positives'" v-bind:score="tp" v-bind:good="true"
                                         v-bind:elements="tp_elements">
                                     </confusion-tile>
-                                    <confusion-tile v-bind:label="'FN'" v-bind:score="fn" v-bind:good="false"
+                                    <confusion-tile v-bind:label="'False Negatives'" v-bind:score="fn" v-bind:good="false"
                                         v-bind:elements="fn_elements">
                                     </confusion-tile>
                                 </div>
                                 <div class="confusion-row">
-                                    <confusion-tile v-bind:label="'FP'" v-bind:score="fp" v-bind:good="false"
+                                    <confusion-tile v-bind:label="'False Positives'" v-bind:score="fp" v-bind:good="false"
                                         v-bind:elements="fp_elements">
                                     </confusion-tile>
 
-                                    <confusion-tile v-bind:label="'TN'" v-bind:score="tn" v-bind:good="true"
+                                    <confusion-tile v-bind:label="'True Negatives'" v-bind:score="tn" v-bind:good="true"
                                         v-bind:elements="tn_elements">
                                     </confusion-tile>
                                 </div>
@@ -408,8 +408,11 @@
                             v-bind:style="{backgroundColor: rgb}"
                             v-on:mouseover="mouseover"
                             v-on:mouseleave="mouseleave">
+
+                            <span class="mdl-chip confusion-score-info-icon">
+    <span class="mdl-chip__text">{{label}}</span>
+</span>
                             
-                            <i class="material-icons-outlined confusion-score-info-icon">info</i>
                             <h3>{{score}}</h3>
                         </div>`,
             methods: {
