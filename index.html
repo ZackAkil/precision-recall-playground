@@ -2,6 +2,8 @@
 
 <head>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
+
     <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
     <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
 
@@ -28,9 +30,10 @@
             display: inline-block;
             border: rgb(255, 64, 129) 5px solid;
             border-radius: 10px;
+            min-width: 870px;
         }
 
-        #positives{
+        #positives {
             border-right: 5px dashed #3f51b5;
         }
 
@@ -57,12 +60,87 @@
             transition: background-color 0.2s;
         }
 
+        #confusion-label-vert-text-title {
+            display: inline-block;
+            position: relative;
+        }
+
+        #confusion-label-vert-text-title>h4 {
+            position: absolute;
+            top: 170px;
+            left: -80px;
+        }
+
+        #confusion-label-vert-text {
+            display: inline-block;
+            width: 35px;
+            padding-top: 52px;
+        }
+
+
+        .confusion-label {
+            width: 150px;
+            display: inline-block;
+            text-align: center;
+            background-color: rgb(255, 64, 129);
+            color: white;
+            padding: 5px 0;
+            margin-bottom: 5px;
+        }
+
+        #truth-label {
+            display: inline-block;
+            width: 35px;
+            vertical-align: top;
+            padding-top: 35px;
+        }
+
+        #predicted-label {
+            text-align: center;
+        }
+
+        .confusion-label-vert>div {
+            transform: rotate(-90deg);
+            display: inline-block;
+            width: 70px;
+            transform-origin: left;
+            margin-top: 70;
+            top: 15px;
+            left: 15px;
+            position: absolute;
+        }
+
+        #confusion-rows {
+            display: inline-block;
+        }
+
+        .confusion-label-vert {
+            height: 150px;
+            background-color: rgb(255, 64, 129);
+            color: white;
+            padding: 0 5px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            position: relative;
+        }
+
+        .confusion-score-info-icon {
+            position: absolute;
+            right: 0.5em;
+            top: 0.5em;
+            color: darkgrey;
+        }
+
+        .confusion-score:hover {
+            font-weight: bold;
+        }
+
         .score:hover {
             background-color: yellow;
         }
 
         #matrix-container {
-            min-width: 400px;
+            min-width: 450px;
         }
 
         #demo {
@@ -101,6 +179,7 @@
                     <div class="mdl-cell mdl-cell--12-col">
 
                         <h3>Predictions</h3>
+                        <p>Something something do classification about stuff </p>
                         <div id="predictor">
                             <div id="positives" class="prediction ui-widget-header">
                                 <h4>Food</h4>
@@ -149,25 +228,50 @@
 
                 <div class="mdl-grid">
 
-                    <div id="matrix-container" class="mdl-cell mdl-cell--3-col">
+                    <div id="matrix-container" class="mdl-cell mdl-cell--5-col">
                         <h3>Confusion Matrix</h3>
                         <div id="confusion-matrix">
-                            <div class="confusion-row">
-                                <confusion-tile v-bind:label="'TP'" v-bind:score="tp" v-bind:good="true"
-                                    v-bind:elements="tp_elements">
-                                </confusion-tile>
-                                <confusion-tile v-bind:label="'FP'" v-bind:score="fp" v-bind:good="false"
-                                    v-bind:elements="fp_elements">
-                                </confusion-tile>
+                            <div id="truth-label">
+                                <div id="confusion-label-vert-text-title">
+                                    <h4>Truth</h4>
+                                </div>
+                                <div id="confusion-label-vert-text">
+                                    <div class="confusion-label-vert">
+                                        <div>Food</div>
+                                    </div>
+                                    <div class="confusion-label-vert">
+                                        <div>Not Food</div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="confusion-row">
-                                <confusion-tile v-bind:label="'FN'" v-bind:score="fn" v-bind:good="false"
-                                    v-bind:elements="fn_elements">
-                                </confusion-tile>
-                                <confusion-tile v-bind:label="'TN'" v-bind:score="tn" v-bind:good="true"
-                                    v-bind:elements="tn_elements">
-                                </confusion-tile>
 
+                            <div id="confusion-rows">
+                                <div id="predicted-label">
+                                    <h4>Predicted</h4>
+                                    <div class="confusion-label">
+                                        <span>Food</span>
+                                    </div>
+                                    <div class="confusion-label">
+                                        <span>Not Food</span>
+                                    </div>
+                                </div>
+                                <div class="confusion-row">
+                                    <confusion-tile v-bind:label="'TP'" v-bind:score="tp" v-bind:good="true"
+                                        v-bind:elements="tp_elements">
+                                    </confusion-tile>
+                                    <confusion-tile v-bind:label="'FN'" v-bind:score="fn" v-bind:good="false"
+                                        v-bind:elements="fn_elements">
+                                    </confusion-tile>
+                                </div>
+                                <div class="confusion-row">
+                                    <confusion-tile v-bind:label="'FP'" v-bind:score="fp" v-bind:good="false"
+                                        v-bind:elements="fp_elements">
+                                    </confusion-tile>
+
+                                    <confusion-tile v-bind:label="'TN'" v-bind:score="tn" v-bind:good="true"
+                                        v-bind:elements="tn_elements">
+                                    </confusion-tile>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -199,6 +303,7 @@
     <script>
 
         const IMAGE_FADE_AMOUNT = 0.2
+        const DECIMAL_PLACES = 2
 
         var positives = new Array()
         var negatives = new Array()
@@ -304,7 +409,8 @@
                             v-on:mouseover="mouseover"
                             v-on:mouseleave="mouseleave">
                             
-                            <h3>{{label}} {{score}}</h3>
+                            <i class="material-icons-outlined confusion-score-info-icon">info</i>
+                            <h3>{{score}}</h3>
                         </div>`,
             methods: {
                 mouseover: function () {
@@ -334,16 +440,16 @@
             },
             computed: {
                 f1: function () {
-                    return 2 * ((this.precision * this.recall) / (this.precision + this.recall))
+                    return (2 * ((this.precision * this.recall) / (this.precision + this.recall))).toFixed(DECIMAL_PLACES)
                 },
                 accuracy: function () {
-                    return (this.tp + this.tn) / (this.tp + this.tn + this.fp + this.fn)
+                    return ((this.tp + this.tn) / (this.tp + this.tn + this.fp + this.fn)).toFixed(DECIMAL_PLACES)
                 },
                 precision: function () {
-                    return this.tp / (this.tp + this.fp)
+                    return (this.tp / (this.tp + this.fp)).toFixed(DECIMAL_PLACES)
                 },
                 recall: function () {
-                    return this.tp / (this.tp + this.fn)
+                    return (this.tp / (this.tp + this.fn)).toFixed(DECIMAL_PLACES)
                 },
                 tp: function () {
                     // true positives
