@@ -24,6 +24,39 @@
 
         .pic>img {
             max-width: 150px;
+            z-index: 1;
+        }
+
+        .pic{
+            z-index: 99;
+        }
+
+        #images{
+            z-index: 10;
+        }
+
+        .food-image>.label::before {
+            content: "Food"
+        }
+
+        .food-image>.label {
+            padding: 5px;
+        }
+
+        .not-food-image>.label::before {
+            content: "Not Food"
+        }
+
+        .not-food-image>.label {
+            padding: 5px;
+            background-color: #3f51b5;
+        }
+
+        .label {
+            margin: 0;
+            position: absolute;
+            color: white;
+            background-color: rgb(255, 64, 129);
         }
 
         #predictor {
@@ -38,7 +71,7 @@
         }
 
         .prediction {
-            height: 400px;
+            height: 300px;
             width: 400px;
             display: inline-block;
             padding: 15px;
@@ -128,7 +161,7 @@
             position: absolute;
             right: 5px;
             top: 5px;
-            color: darkgrey;
+            color: #545454;
         }
 
         .confusion-score:hover {
@@ -140,7 +173,7 @@
         }
 
         #matrix-container {
-            min-width: 450px;
+            min-width: 400px;
         }
 
         #demo {
@@ -153,7 +186,7 @@
             color: #0000000f;
             position: absolute;
             left: .85em;
-            top: .9em;
+            top: .6em;
         }
     </style>
 </head>
@@ -168,7 +201,7 @@
                 <i class="material-icons" style="font-size: 2.2em;">tonality</i>
             </div>
             <div class="mdl-layout__header-row">
-                <span class="mdl-layout-title">Classification Metric Playground</span>
+                <span class="mdl-layout-title">Confusion Matrix Playground</span>
             </div>
         </header>
 
@@ -178,16 +211,21 @@
                 <div class="mdl-grid">
                     <div class="mdl-cell mdl-cell--12-col">
 
-                        <h3>Predictions</h3>
-                        <p>Something something do classification about stuff </p>
+                    </div>
+                </div>
+                <div class="mdl-grid">
+                    <div class="mdl-cell mdl-cell--12-col">
+
+                        <!-- <h3>Predictions</h3>
+                        <p>Something something do classification about stuff </p> -->
                         <div id="predictor">
                             <div id="positives" class="prediction ui-widget-header">
-                                <h4>Food</h4>
+                                <!-- <h4>Food</h4> -->
                                 <p></p>
                                 <i class="material-icons predict-icon">restaurant</i>
                             </div>
                             <div id="negatives" class="prediction ui-widget-header">
-                                <h4>Not Food</h4>
+                                <!-- <h4>Not Food</h4> -->
                                 <p></p>
                                 <i class="material-icons predict-icon">restaurant</i>
                                 <i class="material-icons predict-icon">clear</i>
@@ -197,39 +235,11 @@
                     </div>
                 </div>
 
-                <div class="mdl-grid">
-                    <div id="images">
-                        <div class="pic ui-widget-content positive">
-                            <img src="images/1.jpg">
-                        </div>
-                        <div class="pic ui-widget-content positive">
-                            <img src="images/2.jpg">
-                        </div>
-                        <div class="pic ui-widget-content negative">
-                            <img src="images/5.jpg">
-                        </div>
-                        <div class="pic ui-widget-content negative">
-                            <img src="images/6.jpg">
-                        </div>
-                        <div class="pic ui-widget-content positive">
-                            <img src="images/3.jpg">
-                        </div>
-                        <div class="pic ui-widget-content positive">
-                            <img src="images/4.jpg">
-                        </div>
-                        <div class="pic ui-widget-content negative">
-                            <img src="images/7.jpg">
-                        </div>
-                        <div class="pic ui-widget-content negative">
-                            <img src="images/8.jpg">
-                        </div>
-                    </div>
-                </div>
 
                 <div class="mdl-grid">
 
                     <div id="matrix-container" class="mdl-cell mdl-cell--5-col">
-                        <h3>Confusion Matrix</h3>
+                        <!-- <h3>Confusion Matrix</h3> -->
                         <div id="confusion-matrix">
                             <div id="truth-label">
                                 <div id="confusion-label-vert-text-title">
@@ -259,13 +269,13 @@
                                     <confusion-tile v-bind:label="'True Positives'" v-bind:score="tp" v-bind:good="true"
                                         v-bind:elements="tp_elements">
                                     </confusion-tile>
-                                    <confusion-tile v-bind:label="'False Negatives'" v-bind:score="fn" v-bind:good="false"
-                                        v-bind:elements="fn_elements">
+                                    <confusion-tile v-bind:label="'False Negatives'" v-bind:score="fn"
+                                        v-bind:good="false" v-bind:elements="fn_elements">
                                     </confusion-tile>
                                 </div>
                                 <div class="confusion-row">
-                                    <confusion-tile v-bind:label="'False Positives'" v-bind:score="fp" v-bind:good="false"
-                                        v-bind:elements="fp_elements">
+                                    <confusion-tile v-bind:label="'False Positives'" v-bind:score="fp"
+                                        v-bind:good="false" v-bind:elements="fp_elements">
                                     </confusion-tile>
 
                                     <confusion-tile v-bind:label="'True Negatives'" v-bind:score="tn" v-bind:good="true"
@@ -278,22 +288,60 @@
 
                     <div class="mdl-cell mdl-cell--3-col">
                         <h3>Scores</h3>
-                        <p>Precision: {{this.precision}}</p>
-                        <p>Recall: {{this.recall}}</p>
-                        <p>Accuracy: {{this.accuracy}}</p>
-                        <p>F1: {{this.f1}}</p>
+                        <p>Precision: {{this.precision.toFixed(DECIMAL_PLACES)}}</p>
+                        <p>Recall: {{this.recall.toFixed(DECIMAL_PLACES)}}</p>
+                        <p>Accuracy: {{this.accuracy.toFixed(DECIMAL_PLACES)}}</p>
+                        <p>F1: {{this.f1.toFixed(DECIMAL_PLACES)}}</p>
+
+                        <div>
+                            <h3>Equations</h3>
+                            <p>Precision = <score v-bind:label="'TP'" v-bind:elements="tp_elements"></score> / (<score
+                                    v-bind:label="'TP'" v-bind:elements="tp_elements"></score>+<score
+                                    v-bind:label="'FP'" v-bind:elements="fp_elements"></score>)
+                            </p>
+                            <p>Recall = <score v-bind:label="'TP'" v-bind:elements="tp_elements"></score> / (<score
+                                    v-bind:label="'TP'" v-bind:elements="tp_elements"></score> + <score
+                                    v-bind:label="'FN'" v-bind:elements="fn_elements">
+                                </score>) </p>
+                        </div>
                     </div>
 
-                    <div class="mdl-cell mdl-cell--3-col">
-                        <h3>Equations</h3>
-                        <p>Precision = <score v-bind:label="'TP'" v-bind:elements="tp_elements"></score> / (<score
-                                v-bind:label="'TP'" v-bind:elements="tp_elements"></score>+<score v-bind:label="'FP'"
-                                v-bind:elements="fp_elements"></score>)
-                        </p>
-                        <p>Recall = <score v-bind:label="'TP'" v-bind:elements="tp_elements"></score> / (<score
-                                v-bind:label="'TP'" v-bind:elements="tp_elements"></score> + <score v-bind:label="'FN'"
-                                v-bind:elements="fn_elements">
-                            </score>) </p>
+                    <div class="mdl-cell mdl-cell--4-col">
+
+                            <div id="images">
+                                    <div class="pic ui-widget-content positive">
+                                        <h5 class="label"></h5>
+                                        <img src="images/1.jpg">
+                                    </div>
+                                    <div class="pic ui-widget-content positive">
+                                        <h5 class="label"></h5>
+                                        <img src="images/2.jpg">
+                                    </div>
+                                    <div class="pic ui-widget-content negative">
+                                        <h5 class="label"></h5>
+                                        <img src="images/5.jpg">
+                                    </div>
+                                    <div class="pic ui-widget-content negative">
+                                        <h5 class="label"></h5>
+                                        <img src="images/6.jpg">
+                                    </div>
+                                    <div class="pic ui-widget-content positive">
+                                        <h5 class="label"></h5>
+                                        <img src="images/3.jpg">
+                                    </div>
+                                    <div class="pic ui-widget-content positive">
+                                        <h5 class="label"></h5>
+                                        <img src="images/4.jpg">
+                                    </div>
+                                    <div class="pic ui-widget-content negative">
+                                        <h5 class="label"></h5>
+                                        <img src="images/7.jpg">
+                                    </div>
+                                    <div class="pic ui-widget-content negative">
+                                        <h5 class="label"></h5>
+                                        <img src="images/8.jpg">
+                                    </div>
+                                </div>
                     </div>
                 </div>
             </div>
@@ -338,8 +386,10 @@
 
                     if (this.id == "positives") {
                         push_unique(positives, ui.draggable[0])
+                        $(ui.draggable[0]).addClass('food-image')
                     } else {
                         push_unique(negatives, ui.draggable[0])
+                        $(ui.draggable[0]).addClass('not-food-image')
                     }
 
                 },
@@ -347,8 +397,10 @@
 
                     if (this.id == "positives") {
                         remove_from_array(positives, ui.draggable[0])
+                        $(ui.draggable[0]).removeClass('food-image')
                     } else {
                         remove_from_array(negatives, ui.draggable[0])
+                        $(ui.draggable[0]).removeClass('not-food-image')
                     }
                 }
             });
@@ -443,16 +495,16 @@
             },
             computed: {
                 f1: function () {
-                    return (2 * ((this.precision * this.recall) / (this.precision + this.recall))).toFixed(DECIMAL_PLACES)
+                    return (2 * ((this.precision * this.recall) / (this.precision + this.recall)))
                 },
                 accuracy: function () {
-                    return ((this.tp + this.tn) / (this.tp + this.tn + this.fp + this.fn)).toFixed(DECIMAL_PLACES)
+                    return ((this.tp + this.tn) / (this.tp + this.tn + this.fp + this.fn))
                 },
                 precision: function () {
-                    return (this.tp / (this.tp + this.fp)).toFixed(DECIMAL_PLACES)
+                    return (this.tp / (this.tp + this.fp))
                 },
                 recall: function () {
-                    return (this.tp / (this.tp + this.fn)).toFixed(DECIMAL_PLACES)
+                    return (this.tp / (this.tp + this.fn))
                 },
                 tp: function () {
                     // true positives
