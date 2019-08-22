@@ -287,14 +287,15 @@
                     </div>
 
                     <div class="mdl-cell mdl-cell--3-col">
-                        <h3>Scores</h3>
+                        <h4>Scores</h4>
+                        <p>Accuracy: {{this.accuracy.toFixed(DECIMAL_PLACES)}}</p>
                         <p>Precision: {{this.precision.toFixed(DECIMAL_PLACES)}}</p>
                         <p>Recall: {{this.recall.toFixed(DECIMAL_PLACES)}}</p>
-                        <p>Accuracy: {{this.accuracy.toFixed(DECIMAL_PLACES)}}</p>
-                        <p>F1: {{this.f1.toFixed(DECIMAL_PLACES)}}</p>
-
+                        
+                        <!-- <p>F1: {{this.f1.toFixed(DECIMAL_PLACES)}}</p> -->
+                        <br>
                         <div>
-                            <h3>Equations</h3>
+                            <h4>Equations</h4>
                             <p>Precision = <score v-bind:label="'TP'" v-bind:elements="tp_elements"></score> / (<score
                                     v-bind:label="'TP'" v-bind:elements="tp_elements"></score>+<score
                                     v-bind:label="'FP'" v-bind:elements="fp_elements"></score>)
