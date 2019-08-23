@@ -1,3 +1,5 @@
-# precision-recall-playground
+# Precision Recall Playground / Confusion Matrix Playground
 
-# [Play withe the app](https://zackakil.github.io/precision-recall-playground/)
+# [Play with the the app](https://zackakil.github.io/precision-recall-playground/)
+
+![app.png](app.png)
