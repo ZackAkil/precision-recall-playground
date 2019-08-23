@@ -14,6 +14,11 @@
         integrity="sha256-AAhU14J4Gv8bFupUUcHaPQfvrdNauRHMt+S4UVcaJb0=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <style>
+
+        p{
+            font-size: 18px;
+        }
+
         .pic {
             cursor: move;
             display: inline-block;
@@ -209,8 +214,9 @@
 
             <div id="demo">
                 <div class="mdl-grid">
-                    <div class="mdl-cell mdl-cell--12-col">
-
+                    <div class="mdl-cell mdl-cell--9-col">
+                        <h3>Be the model!</h3>
+                        <p>Pretend to be a machine learning model and predict if an image is of <span style="color: white;background-color:rgb(255, 64, 129)">Food</span> or <span style="color: white;background-color:#3f51b5">Not Food</span>. Then see how you score on the confusion matrix! </p>
                     </div>
                 </div>
                 <div class="mdl-grid">
@@ -308,6 +314,14 @@
                     </div>
 
                     <div class="mdl-cell mdl-cell--4-col">
+
+                            <!-- <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button">
+                                    Good Model
+                                  </button>
+
+                                  <button class="mdl-button mdl-js-button  mdl-button--raised mdl-js-ripple-effect mdl-button">
+                                        Bad Model
+                                      </button> -->
 
                             <div id="images">
                                     <div class="pic ui-widget-content positive">
