@@ -14,8 +14,7 @@
         integrity="sha256-AAhU14J4Gv8bFupUUcHaPQfvrdNauRHMt+S4UVcaJb0=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <style>
-
-        p{
+        p {
             font-size: 18px;
         }
 
@@ -32,11 +31,11 @@
             z-index: 1;
         }
 
-        .pic{
+        .pic {
             z-index: 99;
         }
 
-        #images{
+        #images {
             z-index: 10;
         }
 
@@ -105,8 +104,8 @@
 
         #confusion-label-vert-text-title>h4 {
             position: absolute;
-            top: 170px;
-            left: -80px;
+            top: 150px;
+            left: -100px;
         }
 
         #confusion-label-vert-text {
@@ -144,7 +143,7 @@
             transform-origin: left;
             margin-top: 70;
             top: 15px;
-            left: 15px;
+            left: 17.5px;
             position: absolute;
         }
 
@@ -157,7 +156,6 @@
             background-color: rgb(255, 64, 129);
             color: white;
             padding: 0 5px;
-            margin-right: 5px;
             margin-bottom: 5px;
             position: relative;
         }
@@ -216,7 +214,10 @@
                 <div class="mdl-grid">
                     <div class="mdl-cell mdl-cell--9-col">
                         <h3>Be the model!</h3>
-                        <p>Pretend to be a machine learning model and predict if an image is of <span style="color: white;background-color:rgb(255, 64, 129)">Food</span> or <span style="color: white;background-color:#3f51b5">Not Food</span>. Then see how you score on the confusion matrix! </p>
+                        <p>Pretend to be a machine learning model and predict if an image is of <span
+                                style="color: white;background-color:rgb(255, 64, 129)">Food</span> or <span
+                                style="color: white;background-color:#3f51b5">Not Food</span>. Then see how you score on
+                            the confusion matrix! </p>
                     </div>
                 </div>
                 <div class="mdl-grid">
@@ -249,7 +250,7 @@
                         <div id="confusion-matrix">
                             <div id="truth-label">
                                 <div id="confusion-label-vert-text-title">
-                                    <h4>Truth</h4>
+                                    <h4>Correct Answer</h4>
                                 </div>
                                 <div id="confusion-label-vert-text">
                                     <div class="confusion-label-vert">
@@ -263,7 +264,7 @@
 
                             <div id="confusion-rows">
                                 <div id="predicted-label">
-                                    <h4>Predicted</h4>
+                                    <h4>Your Prediction</h4>
                                     <div class="confusion-label">
                                         <span>Food</span>
                                     </div>
@@ -297,7 +298,7 @@
                         <p>Accuracy: {{this.accuracy.toFixed(DECIMAL_PLACES)}}</p>
                         <p>Precision: {{this.precision.toFixed(DECIMAL_PLACES)}}</p>
                         <p>Recall: {{this.recall.toFixed(DECIMAL_PLACES)}}</p>
-                        
+
                         <!-- <p>F1: {{this.f1.toFixed(DECIMAL_PLACES)}}</p> -->
                         <br>
                         <div>
@@ -315,7 +316,7 @@
 
                     <div class="mdl-cell mdl-cell--4-col">
 
-                            <!-- <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button">
+                        <!-- <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button">
                                     Good Model
                                   </button>
 
@@ -323,40 +324,40 @@
                                         Bad Model
                                       </button> -->
 
-                            <div id="images">
-                                    <div class="pic ui-widget-content positive">
-                                        <h5 class="label"></h5>
-                                        <img src="images/1.jpg">
-                                    </div>
-                                    <div class="pic ui-widget-content positive">
-                                        <h5 class="label"></h5>
-                                        <img src="images/2.jpg">
-                                    </div>
-                                    <div class="pic ui-widget-content negative">
-                                        <h5 class="label"></h5>
-                                        <img src="images/5.jpg">
-                                    </div>
-                                    <div class="pic ui-widget-content negative">
-                                        <h5 class="label"></h5>
-                                        <img src="images/6.jpg">
-                                    </div>
-                                    <div class="pic ui-widget-content positive">
-                                        <h5 class="label"></h5>
-                                        <img src="images/3.jpg">
-                                    </div>
-                                    <div class="pic ui-widget-content positive">
-                                        <h5 class="label"></h5>
-                                        <img src="images/4.jpg">
-                                    </div>
-                                    <div class="pic ui-widget-content negative">
-                                        <h5 class="label"></h5>
-                                        <img src="images/7.jpg">
-                                    </div>
-                                    <div class="pic ui-widget-content negative">
-                                        <h5 class="label"></h5>
-                                        <img src="images/8.jpg">
-                                    </div>
-                                </div>
+                        <div id="images">
+                            <div class="pic ui-widget-content positive">
+                                <h5 class="label"></h5>
+                                <img src="images/1.jpg">
+                            </div>
+                            <div class="pic ui-widget-content positive">
+                                <h5 class="label"></h5>
+                                <img src="images/2.jpg">
+                            </div>
+                            <div class="pic ui-widget-content negative">
+                                <h5 class="label"></h5>
+                                <img src="images/5.jpg">
+                            </div>
+                            <div class="pic ui-widget-content negative">
+                                <h5 class="label"></h5>
+                                <img src="images/6.jpg">
+                            </div>
+                            <div class="pic ui-widget-content positive">
+                                <h5 class="label"></h5>
+                                <img src="images/3.jpg">
+                            </div>
+                            <div class="pic ui-widget-content positive">
+                                <h5 class="label"></h5>
+                                <img src="images/4.jpg">
+                            </div>
+                            <div class="pic ui-widget-content negative">
+                                <h5 class="label"></h5>
+                                <img src="images/7.jpg">
+                            </div>
+                            <div class="pic ui-widget-content negative">
+                                <h5 class="label"></h5>
+                                <img src="images/8.jpg">
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
