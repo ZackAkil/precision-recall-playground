@@ -13,7 +13,7 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"
         integrity="sha256-AAhU14J4Gv8bFupUUcHaPQfvrdNauRHMt+S4UVcaJb0=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
     <style>
         p {
             font-size: 18px;
@@ -374,7 +374,8 @@
                 </div>
             </div>
             <footer>
-                <span>Hacked together by <a id="me" href="https://twitter.com/zackakil" target="_blank">@ZackAkil</a></span>
+                <span>Hacked together by <a id="me" href="https://twitter.com/zackakil"
+                        target="_blank">@ZackAkil</a></span>
             </footer>
         </main>
     </div>
@@ -382,7 +383,6 @@
     <script>
 
         const IMAGE_FADE_AMOUNT = 0.2
-        const DECIMAL_PLACES = 2
 
         var positives = new Array()
         var negatives = new Array()
@@ -521,6 +521,7 @@
         var app = new Vue({
             el: '#app',
             data: {
+                DECIMAL_PLACES: 2,
                 predicted_positives: positives,
                 predicted_negatives: negatives
             },
